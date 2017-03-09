@@ -14,22 +14,40 @@ where c.country = 'Brazil' and
 c.customerid = i.customerid;
 
 -- 4. Provide a query showing only the Employees who are Sales Agents.
-
+select * from employee
+where employee.title = 'Sales Support Agent';
 
 -- 5. Provide a query showing a unique list of billing countries from the Invoice table.
-
+select distinct billingcountry from invoice;
 
 -- 6. Provide a query showing the invoices of customers who are from Brazil.
-
+select *
+from customer as c, invoice as i
+where c.country = 'Brazil' and
+c.customerid = i.customerid;
 
 -- 7. Provide a query that shows the invoices associated with each sales agent. The resultant table should include the Sales Agent's full name.
-
+select e.firstname, e.lastname, i.invoiceid, i.customerid, i.invoicedate, i.billingaddress, i.billingcountry, i.billingpostalcode, i.total
+from customer as c, invoice as i
+on c.customerid = i.customerid
+join employee as e
+on e.employeeid = c.supportrepid
+order by e.employeeid;
 
 -- 8. Provide a query that shows the Invoice Total, Customer name, Country and Sale Agent name for all invoices and customers.
-
+select e.firstname as 'employee first', e.lastname as 'employee last', c.firstname as 'customer first', c.lastname as 'customer last', c.country, i.total
+from employee as e
+	join customer as c on e.employeeid = c.supportrepid
+	join invoice as i on c.customerid = i.customerid
 
 -- 9. How many Invoices were there in 2009 and 2011? What are the respective total sales for each of those years?
+select count(i.invoiceid), sum(i.total)
+from invoice as i
+where i.invoicedate between datetime('2011-01-01 00:00:00') and datetime('2011-12-31 00:00:00');
 
+select count(i.invoiceid), sum(i.total)
+from invoice as i
+where i.invoicedate between datetime('2009-01-01 00:00:00') and datetime('2009-12-31 00:00:00');
 
 -- 10. Looking at the InvoiceLine table, provide a query that COUNTs the number of line items for Invoice ID 37.
 
